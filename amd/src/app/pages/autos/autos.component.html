@@ -1,0 +1,74 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+  
+      <p-table #dt [value]="autos" [rows]="10" [paginator]="true" styleClass="p-datatable-responsive-demo" [paginator]="true" [rowsPerPageOptions]="[10,25,50]"
+          [(selection)]="selectedAutos" [rowHover]="true" dataKey="id"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+          <ng-template pTemplate="caption">
+              <div class="p-d-flex p-ai-center p-jc-between">
+                  <h5 class="p-m-0">Manage Autos</h5>
+                  <span>
+                      <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." class="p-inputtext p-component"/>
+                  </span>
+                  <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-primary p-mr-2 crud-header-btns" (click)="openNew()"></button>
+                  <button pButton pRipple icon="pi pi-trash" class="p-button-danger crud-header-btns table-delete-btn" (click)="deleteRows()" [disabled]="!selectedAutos || !selectedAutos.length"></button>      
+              </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+              <tr>
+                <th>
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th *ngFor="let col of cols" [ngStyle]="{'display': (col.field == 'id') ? 'none' : '' }">{{col.header}}</th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-quto>
+              <tr style="cursor: pointer;" [ngStyle]="{'background': (rowData['carStatus'] == 1) ? 'beige' : (rowData['carStatus'] == 2) ? 'mistyrose' : ''}">
+                <td>
+                    <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+                </td>
+                  <td *ngFor="let col of cols" [ngStyle]="{'display': (col.field == 'id') ? 'none' : '' }">
+                    {{rowData[col.field]}}
+                </td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="editRow(rowData)"></button>
+                </td>
+              </tr>
+          </ng-template>
+      </p-table>
+
+    </div>
+  </div>
+</div>
+
+<p-dialog [(visible)]="showDialog" [style]="{width: '450px'}" header="Auto Details" [modal]="true" styleClass="p-fluid">
+
+        <div class="p-field">
+            <div class="p-formgrid p-grid">
+                <div class="p-field-radiobutton p-col-6">
+                    <label for="category1">Name</label>
+                    <input pInputText type="text" placeholder="" class="p-inputtext p-component"/>
+                </div>
+                <div class="p-field-radiobutton p-col-6">
+                    <label for="category2">Brand</label>
+                    <input pInputText type="text" placeholder="" class="p-inputtext p-component"/>
+                </div>
+                <div class="p-field-radiobutton p-col-6">
+                    <label for="category3">Color</label>
+                    <input pInputText type="text" placeholder="" class="p-inputtext p-component"/>
+                </div>
+                <div class="p-field-radiobutton p-col-6">
+                    <label for="category4">Buyer</label>
+                    <input pInputText type="text" placeholder="" class="p-inputtext p-component"/>
+                </div>
+            </div>
+        </div>
+    
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveAuto()"></button>
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
